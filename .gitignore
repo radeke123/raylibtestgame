@@ -1,0 +1,9 @@
+#build directories
+
+cmake-build-*/
+build*/
+
+#ide files
+
+.vs/
+.idea/
