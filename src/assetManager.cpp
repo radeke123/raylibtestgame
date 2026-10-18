@@ -9,7 +9,7 @@ Texture2D assetManager::getAssetTexture2D(int id) {
             break;
         }
         case 1: {
-            if (Texture2DMap.find(id) == nullptr) {
+            if (!Texture2DMap.contains(id)) {
                 asset = LoadTexture("./assets/background.png");
                 Texture2DMap[id] = asset;
             }else {
@@ -18,8 +18,26 @@ Texture2D assetManager::getAssetTexture2D(int id) {
             break;
         }
         case 2: {
-            if (Texture2DMap.find(id) == nullptr) {
+            if (!Texture2DMap.contains(id)) {
                 asset = LoadTexture("./assets/player.png");
+                Texture2DMap[id] = asset;
+            }else {
+                return Texture2DMap[id];
+            }
+            break;
+        }
+        case 3: {
+            if (!Texture2DMap.contains(id)) {
+                asset = LoadTexture("./assets/ball.png");
+                Texture2DMap[id] = asset;
+            }else {
+                return Texture2DMap[id];
+            }
+            break;
+        }
+        case 4: {
+            if (!Texture2DMap.contains(id)) {
+                asset = LoadTexture("./assets/floor.png");
                 Texture2DMap[id] = asset;
             }else {
                 return Texture2DMap[id];
@@ -38,7 +56,7 @@ Image assetManager::getAssetImage(int id) {
             break;
         }
         case 1: {
-            if (ImageMap.find(id) == nullptr) {
+            if (!ImageMap.contains(id)) {
                 asset = LoadImage("./assets/icon.png");
                 ImageMap[id] = asset;
             }else {
