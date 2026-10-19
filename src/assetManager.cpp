@@ -80,4 +80,6 @@ void assetManager::unload() {
     ImageMap.clear();
 }
 
-assetManager::~assetManager() = default;
+assetManager::~assetManager() {
+    unload();
+}

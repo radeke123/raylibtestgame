@@ -9,8 +9,8 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(raylibtestgame src/main.cpp
         src/assetManager.cpp
         src/assetManager.h
-        src/gravity.cpp
-        src/gravity.h)
+        src/game.cpp
+        src/game.h)
 
 target_include_directories(raylibtestgame PRIVATE ${CMAKE_SOURCE_DIR}/lib/include)
 target_link_directories(raylibtestgame PRIVATE ${CMAKE_SOURCE_DIR}/lib)
