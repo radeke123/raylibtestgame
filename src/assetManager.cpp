@@ -1,8 +1,8 @@
 #include "assetManager.h"
 #include <iostream>
 
-Texture2D assetManager::getAssetTexture2D(int id) {
-    Texture2D asset = Texture2D();
+Texture2D assetManager::getAssetTexture2D(const int id) {
+    auto asset = Texture2D();
     switch (id) {
         default: {
             std::cerr << "assetManager::getAssetTexture2D - unknown id: " << id << std::endl;
@@ -48,8 +48,8 @@ Texture2D assetManager::getAssetTexture2D(int id) {
     return asset;
 }
 
-Image assetManager::getAssetImage(int id) {
-    Image asset = Image();
+Image assetManager::getAssetImage(const int id) {
+    auto asset = Image();
     switch (id) {
         default: {
             std::cerr << "assetManager::getAssetImage - unknown id: " << id << std::endl;
