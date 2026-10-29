@@ -1,4 +1,5 @@
 #include "game.h"
+#include <raymath.h>
 #include <string>
 
 void game::run() {
@@ -8,15 +9,20 @@ void game::run() {
     SetTargetFPS(240);
     SetWindowIcon(icon);
 
-    const Texture2D background = assetManager::getAssetTexture2D(1);
+    Texture2D background = assetManager::getAssetTexture2D(1);
     const Texture2D player = assetManager::getAssetTexture2D(2);
     const Texture2D ball = assetManager::getAssetTexture2D(3);
-    const Texture2D floor = assetManager::getAssetTexture2D(4);
+    Texture2D floor = assetManager::getAssetTexture2D(4);
 
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
 
     while (!WindowShouldClose()) {
+        background.height = GetScreenHeight();
+        background.width = GetScreenWidth();
+
+        floor.width = GetScreenWidth();
+
         Rectangle floorRect = { -800.0f, 380.0f, static_cast<float>(floor.width) + 800 * 2, static_cast<float>(floor.height) };
         Rectangle ballRect = { ballPos.x, ballPos.y, static_cast<float>(ball.width), static_cast<float>(ball.height) };
         Rectangle playerRect = { playerPos.x, playerPos.y, static_cast<float>(player.width), static_cast<float>(player.height) };
@@ -24,10 +30,15 @@ void game::run() {
         if (IsKeyPressed(KEY_F11)) {
             ToggleFullscreen();
         }
-        if (!IsWindowFullscreen()) {
-            floorRect.y = GetScreenHeight() - 20;
+        if (IsWindowResized()) {
+            playerPos.x = 0;
+            playerPos.y = 0;
+            ballPos.x = 0;
+            ballPos.y = 0;
         }
+        floorRect.y = static_cast<float>(GetScreenHeight()) - 20;
 
+        //collisions
         if (!CheckCollisionRecs(ballRect, floorRect)) {
             ballPos.y += 250.0f * GetFrameTime();
         }
@@ -41,23 +52,21 @@ void game::run() {
             if (IsKeyDown(KEY_SPACE)) playerPos.y -= 100;
         }
 
+        playerPos.x = Clamp(playerPos.x, -20, static_cast<float>(GetScreenWidth()) - player.width + 25);
+
         BeginDrawing();
         ClearBackground(PINK);
         BeginMode2D(camera);
 
-        camera.target = {playerPos.x, 0};
-        camera.offset = {static_cast<float>(GetScreenWidth()) / 2, 0};
+        camera.target = {0, 0};
+        camera.offset = {0, 0};
 
-        DrawTexture(background, 0, GetScreenHeight() - 400, WHITE);
-        DrawTexture(background, -800, GetScreenHeight() - 400, WHITE);
-        DrawTexture(background, 800, GetScreenHeight() - 400, WHITE);
+        DrawTexture(background, 0 - camera.offset.x, 0, WHITE);
         DrawTexture(floor, 0, GetScreenHeight() - 20, WHITE);
-        DrawTexture(floor, -800, GetScreenHeight() - 20, WHITE);
-        DrawTexture(floor, 800, GetScreenHeight() - 20, WHITE);
-        DrawTexture(player, playerPos.x, playerPos.y, WHITE);
-        DrawTexture(ball, ballPos.x, ballPos.y, WHITE);
+        DrawTexture(player, static_cast<int>(playerPos.x), static_cast<int>(playerPos.y), WHITE);
+        DrawTexture(ball, static_cast<int>(ballPos.x), static_cast<int>(ballPos.y), WHITE);
 
-        DrawText(("FPS: " + std::to_string(GetFPS())).c_str(), camera.target.x - 400, 0, 20, BLACK);
+        DrawText(("FPS: " + std::to_string(GetFPS())).c_str(), 0, 0, 20, BLACK);
 
         EndMode2D();
         EndDrawing();
